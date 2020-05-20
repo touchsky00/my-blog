@@ -1,0 +1,151 @@
+html,body {
+    padding:0;
+    margin:0;
+    width: 100%;
+    min-height: 100%;
+    font-family:'Microsoft Yahei',"simsun";
+    /* background: #ffffff; */
+}
+.el-button {
+    border-radius: 2px;
+}
+.el-button.is-circle {
+    border-radius: 50%;
+}
+
+.el-input__inner {
+    border-radius: 2px;
+}
+.el-popover {
+    padding: 10px 12px;
+    max-height: 68px;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
+    overflow: hidden;
+}
+
+::-webkit-scrollbar {
+	width: 2px;
+}
+::-webkit-scrollbar-thumb {
+	border-radius: 2.5px;
+	background: rgba(159, 159, 159, 0.5);
+}
+::-webkit-scrollbar-track {
+	background: rgba(225, 225, 225, 0.2);
+	border-radius: 2.5px;
+}
+/* 原生button */
+.btn {
+    background: transparent;
+    outline: none;
+    padding: 3px 5px;
+    border-radius: 2px;
+    font-size: 13px;
+}
+.btn.primary {
+    color: #ffffff;
+    border: none;
+    background-color: #145c00;
+}
+.btn.primary:hover {
+    background-color: #1d8700;
+}
+.btn.primary:active {
+    background-color: #145c00;
+}
+
+/* 分割线 */
+.divider {
+    padding-top:15px;
+    border-bottom: 1px solid rgb(194, 194, 194);
+    margin-bottom: 15px;
+}
+
+/* 文字连接 */
+.span-link {
+    cursor: pointer;
+    color: #145c00;
+}
+.span-link:hover {
+    color: #1d8700;
+}
+
+.span-link:active  {
+    color: #145c00;
+}
+/* 文字连接 灰色*/
+.span-link-gray {
+    cursor: pointer;
+    margin-right: 20px;
+}
+.span-link-gray:hover {
+    color: #808080;
+}
+.span-link-gray:active {
+    color: rgb(60, 60, 60);
+}
+
+/* 标签选择器 */
+.tag {
+    font-size: 14px;
+    height: 20px;
+    line-height: 20px;
+    border-radius: 2px;
+    box-sizing: border-box;
+    padding: 0 5px;
+    cursor: pointer;
+    margin: 3px;
+}
+.tag.select{
+    color: #fff;
+    background-color: #145c00;
+    border: 1px solid #145c00;
+}
+.tag.none {
+    color: #666;
+    border: 1px solid #333;
+}
+.tag.none:hover {
+    color: #fff;
+    background-color: #145c00;
+    border: 1px solid #145c00;
+}
+
+/* 下雨效果 */
+#rain {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+}
+
+/* 原生input */
+.input-wrap {
+    outline: none;
+    padding: 3px 5px;
+    font-size: 12px;
+    border-radius: 2px;
+    border: 1px solid rgb(172, 172, 172);
+    width: 100%;
+    box-sizing: border-box;
+    background: transparent;
+}
+.input-textarea {
+    box-sizing: border-box;
+    width: 100%;
+    border: 1px solid #ccc;
+    outline: none;
+    height: 100px;
+    overflow: auto;
+    background: transparent;
+    padding: 5px 10px;
+}
+
+.v-note-wrapper {
+    background: transparent !important;
+    border: none !important;
+}
