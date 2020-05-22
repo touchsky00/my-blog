@@ -25,7 +25,7 @@
             <!-- 文章评论 -->
             <div class="comment-wrapper">
                 <div class="comment-header">
-                    <div>文章评论(100)</div>
+                    <div>文章评论({{commentList.length}})</div>
                     <div>
                         <span class="span-link" @click="showCommentInput">发表评论</span>
                     </div>
@@ -36,7 +36,7 @@
                 <div class="comment-input" v-show="isShowCommentInput">
                     <div class="input-wrapper">
                         <div class="input-item">
-                           <p><span style="color:red;">*</span>姓名：</p><input placeholder="输入姓名" v-model="commentContent.name" class="input-wrap"/>
+                           <p><span style="color:red;">*</span>昵称：</p><input placeholder="输入姓名" v-model="commentContent.name" class="input-wrap"/>
                         </div>
                         <div class="input-item">
                            <p>邮箱：</p><input placeholder="填写邮箱" v-model="commentContent.email" class="input-wrap"/>
@@ -46,7 +46,7 @@
                         <div 　class="textarea-header"><p><span style="color:red;">*</span>评论内容：</p></div>
                         <textarea v-model="commentContent.content" placeholder="请输入评论内容(不超过300字)" class="input-textarea"/>
                     </div>
-                    <div class="btn-bottom"><button class="btn primary" @click="submitComment">提交评论</button></div>
+                    <div class="btn-bottom"><button class="btn primary" @click="submitContent">提交评论</button></div>
                 </div>
 
                 <div class="items-wrapper" v-if="commentListDisplay.length > 0">
@@ -62,7 +62,7 @@
 
 <script>
 import { verifyMail } from '../assets/libs/utils'
-import { getFileContent } from '../api/api'
+import { getFileContent, submitComment, getCommentList } from '../api/api'
 
 
 export default {
@@ -90,17 +90,7 @@ export default {
     },
     data() {
         return {
-            commentList: [
-                {id:'1', name: '123456' , content:'这篇文章写得不好' },
-                {id:'2', name: '小林' , content:'这篇文章写得不好' },
-                {id:'3', name: '小林' , content:'这篇文章写得不好' },
-                {id:'4', name: '小林小林小林' , content:'这篇文章写得不好' },
-                {id:'5', name: '小' , content:'这篇文章写得不好' },
-                {id:'6', name: '小林小林' , content:'这篇文章写得不好' },
-                {id:'7', name: '小林小林小林' , content:'这篇文章写得不好' },
-                {id:'8', name: '小' , content:'这篇文章写得不好' },
-                {id:'9', name: '小林小林' , content:'这篇文章写得不好' }
-            ],
+            commentList: [],
             isShowCommentInput: false,
             commentContent: {
                 name:'',
@@ -115,19 +105,30 @@ export default {
         // 返回主页
         toHomePath() {
             this.$router.push('/home')
-        },
+        },  
         //显示评论区
         showCommentInput() {
             this.isShowCommentInput = !this.isShowCommentInput;
         },
-        submitComment() {
+
+
+        //更新评论列表
+        async refleshCommentList() {
+            let articleId = this.$route.query.id
+            let res = await getCommentList({articleId:articleId});
+            if(res.code !== 0) {
+                return;
+            }
+            this.commentList = res.commentList;
+        },
+
+        // 提交评论
+        async submitContent() {
             let { name, email, content } = this.commentContent;
             if(!name||!content) {
                 this.$message.warning('缺少姓名或评论内容')
                 return;
             }
-            content = JSON.stringify(content);
-            name = JSON.stringify(name);
             if(name.length>20) {
                 this.$message.warning('输入少于20个字的名字')
                 return;
@@ -142,24 +143,38 @@ export default {
                     return;
                 }
             }
+
+            let params = {
+                articleId: this.$route.query.id,
+                name: name,
+                content: content,
+                email: email
+            }
+            let res = await submitComment(params);
             this.$message.success('提交成功')
             this.commentContent = {name:'', email:'', content:''};
             this.isShowCommentInput = false;
+            this.refleshCommentList();
         },
 
         // 获取md文件
         async getMdFile() {
-            let { id , name } = this.$route.query;
-            this.articleName = name;
-            let res = await getFileContent(name);
+            let {id ,name } = this.$route.query;
+            let params = {
+                articleId: id,
+                articleName: name
+            }
+            let res = await getFileContent(params)
             if(res.code !== 0) {
                 return;
             }
-            this.htmlMD = res.data
+            this.articleName = res.data.articleName;
+            this.htmlMD = res.data.content
         }
     },
     mounted() {
-        this.getMdFile()
+        this.getMdFile();
+        this.refleshCommentList();
     }
 }
 </script>

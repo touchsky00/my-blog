@@ -9,7 +9,7 @@ class AjaxRequest{
 
     //构造请求参数
     merge(options) {
-        return {...options, timeout: this.timeout }
+        return {...options}
     }
 
     // 拦截方法
@@ -17,7 +17,7 @@ class AjaxRequest{
         // 请求时拦截器,更改请求头
         instance.interceptors.request.use((config) => {
             config.headers.Authorization = "xxx"
-            config.headers['Content-Type'] = 'application/x-www-form-urlencoded'
+            config.headers['Content-Type'] = 'application/json'
             return config;
         }, (err) => {
             return Promise.reject(err);

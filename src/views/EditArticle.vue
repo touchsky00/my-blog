@@ -25,7 +25,7 @@
             <div class="edit-bottom">
                 <div class="synopsis-input">
                     <div>文章简介： </div>
-                    <div style="width:80%;"><textarea v-model="articleSynopsis" class="input-textarea"/></div>
+                    <div style="width:80%;"><textarea v-model="overview" class="input-textarea"/></div>
                 </div>
                 <div class="article-tag">
                     <div class="input-tag">
@@ -53,13 +53,14 @@
 import { readFile } from '../assets/libs/utils'
 import { uploadFile } from '../api/api'
 
+
 export default {
     data() {
         return {
             editContent:'',
             fileName:'',
             mavonHeight: window.innerHeight - 240 + 'px',
-            articleSynopsis:'',
+            overview:'',
             tagList:[],
             articleTag:''
         }
@@ -98,6 +99,8 @@ export default {
         async submitArticle() {
             let name = this.fileName;
             let content = this.editContent;
+            let overview = this.overview;
+            let tagList = this.tagList;
             if(!name) {
                 this.$message.warning('请输入文件名');
                 return;
@@ -106,13 +109,27 @@ export default {
                 this.$message.warning('编辑内容为空');
                 return;
             }
-            let fileName = name + '.md';
-            var file = new File([content], fileName, {
-                type: "text/plain;charset=utf-8"
-            });
-            let params = new FormData();
-            params.append("file",file)
-            let res = await uploadFile(params)
+            if(!overview) {
+                this.$message.warning('请输入文件摘要');
+                return;
+            }
+            if(tagList.length === 0) {
+                this.$message.warning('请输入文件标签');
+                return;
+            }
+            let requestData = {
+                articleName:  name,
+                overview: overview,
+                content: content,
+                articleTag: tagList,
+            }
+            // let fileName = name + '.md';
+            // var file = new File([content], fileName, {
+            //     type: "text/plain;charset=utf-8"
+            // });
+            // let params = new FormData();
+            // params.append("file",file)
+            let res = await uploadFile(requestData)
             if(res.code !== 0) {
                 this.$message.error(res.message)
                 return;

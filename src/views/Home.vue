@@ -8,7 +8,7 @@
                 <div>文章标签</div>
             </div>
             <div class="tag-wrapper">
-                <div :class="item.isSelect?'tag select':'tag none'" v-for="item in tagList" :key="item.id" @click="changeSelect(item)">{{item.tag}}</div> 
+                <div :class="item.isSelect?'tag select':'tag none'" v-for="(item,index) in tagList" :key="index" @click="changeSelect(item)">{{item.tag}}</div> 
             </div>
             <!-- 作者内容 -->
             <div class="author-desc">
@@ -16,7 +16,7 @@
                     <div class="author image"><img style="width:100%;height:100%;" src="../assets/logo.jpeg" /></div>
                     <div class="author article">
                         <div class="count-label">文章数</div>
-                        <div class="article-count"><span class="span-link">1223</span></div>
+                        <div class="article-count"><span @click="selectAllTag" class="span-link">{{articleList.length}}</span></div>
                     </div>
                     <div class="author article">
                         <div class="count-label">留言</div>
@@ -35,12 +35,12 @@
                 <!-- 最新发布 -->
                 <div class="article-dispaly">
                     <div v-show="searchTagList.length == 0">
-                        <div class="article-new">最近更新：<span @click="toArticleContent(newestArticle)" class="span-link-gray">{{newestArticle.name}}</span><span style="font-size:13px;">2020:23:23</span></div>
+                        <div class="article-new">最近更新：<span @click="toArticleContent(newestArticle)" class="span-link-gray">{{newestArticle.articleName}}</span><span style="font-size:13px;">{{newestArticle.date.slice(0,10)}}</span></div>
                         <!-- 分割线 -->
                         <div class="divider"></div>
                         <div>
-                            <div class="article-tag">标签：<span class="span-link">vue</span></div>
-                            {{newestArticle.articleSynopsis}}
+                            <div class="article-tag">标签：<span v-for="(item,index) in newestArticle.articleTag" :key="index" class="span-link" style="margin-right:10px;">{{item}}</span></div>
+                            {{newestArticle.overview}}
                             <div class="read-complete"><span @click="toArticleContent(newestArticle)" class="span-link">前往阅读>>></span></div>
                         </div>
                     </div>
@@ -51,13 +51,13 @@
                         <span class="span-link" style="margin-right:10px;" v-for="(item,index) in searchTagList" :key="index">{{item}}</span>
                     </div>
                     <div class="table-wrapper" id="tableWrapper" v-if="searchTagList.length !== 0">
-                        <div class="article-list" v-for="item in articleList" :key="item.id">
-                            <span @click="toArticleContent(item)" class="span-link-gray">{{item.name}}</span><span style="font-size:13px;margin-left:15px;">{{item.date}}</span>
+                        <div class="article-list" v-for="item in articleList" :key="item.articleId">
+                            <span @click="toArticleContent(item)" class="span-link-gray">{{item.articleName}}</span><span style="font-size:13px;margin-left:15px;">{{item.date.slice(0,10)}}</span>
                         </div>
                     </div>
                     <div class="table-wrapper" id="tableWrapper" v-if="searchTagList.length === 0">
-                        <div class="article-list" v-for="item in newestList" :key="item.id">
-                            <span @click="toArticleContent(item)" class="span-link-gray">{{item.name}}</span><span style="font-size:13px;margin-left:15px;">{{item.date}}</span>
+                        <div class="article-list" v-for="item in newestList" :key="item.articleId">
+                            <span @click="toArticleContent(item)" class="span-link-gray">{{item.articleName}}</span><span style="font-size:13px;margin-left:15px;">{{item.date.slice(0,10)}}</span>
                         </div>
                     </div>
                 </div> 
@@ -69,7 +69,7 @@
 
 <script>
 import { throttle, random , drawRain , getWindowWH , drawPointSpread} from '../assets/libs/utils'
-import { getFileList } from '../api/api'
+import { getFileList, getTagList , getSearchArticle} from '../api/api'
 
 export default {
     
@@ -82,6 +82,7 @@ export default {
                 return  this.articleList.slice(this.articleList.length-10,this.articleList.length);
             }
         },
+
         //计算searchTagList
         searchTagList: function() {
             let arr = [];
@@ -97,64 +98,48 @@ export default {
     data() {
         return {
             //标签列表
-            tagList: [
-                { id:'1', tag:'vue' ,isSelect: false},
-                { id:'2', tag:'vue' ,isSelect: false},
-                { id:'3', tag:'vue' ,isSelect: false},
-                { id:'4', tag:'vue' ,isSelect: false},
-                { id:'5', tag:'vue' ,isSelect: false},
-                { id:'6', tag:'vue' ,isSelect: false},
-                { id:'7', tag:'vue' ,isSelect: false},
-                { id:'8', tag:'vue' ,isSelect: false},
-                { id:'9', tag:'vue' ,isSelect: false},
-                { id:'10', tag:'vue' ,isSelect: false},
-                { id:'11', tag:'vue' ,isSelect: false},
-                { id:'12', tag:'vue' ,isSelect: false},
-                { id:'13', tag:'vue' ,isSelect: false},
-                { id:'14', tag:'vue' ,isSelect: false},
-                { id:'15', tag:'vue' ,isSelect: false},
-                { id:'16', tag:'vue' ,isSelect: false},
-                { id:'17', tag:'vue' ,isSelect: false},
-                { id:'18', tag:'vue' ,isSelect: false},
-                { id:'19', tag:'vue' ,isSelect: false},
-                { id:'20', tag:'vue' ,isSelect: false},
-                { id:'21', tag:'vue' ,isSelect: false},
-                { id:'22', tag:'vue' ,isSelect: false},
-                { id:'23', tag:'vue' ,isSelect: false},
-                { id:'24', tag:'vue' ,isSelect: false},
-                { id:'25', tag:'vue' ,isSelect: false},
-                { id:'26', tag:'vue' ,isSelect: false},
-                { id:'27', tag:'vue' ,isSelect: false},
-                { id:'28', tag:'vue' ,isSelect: false},
-                { id:'29', tag:'vue' ,isSelect: false},
-                { id:'30', tag:'vue' ,isSelect: false},
-                { id:'31', tag:'vue' ,isSelect: false},
-                { id:'32', tag:'vue' ,isSelect: false},
-                { id:'33', tag:'vue' ,isSelect: false},
-                { id:'34', tag:'vue' ,isSelect: false},
-                { id:'35', tag:'vue' ,isSelect: false},
-                { id:'36', tag:'vue' ,isSelect: false},
-            ],
+            tagList: [],
             //文章列表
             articleList:[],
             //最新篇文章
-            newestArticle: {},
+            newestArticle: {
+                articleId:'',
+                articleName:'',
+                overview:'',
+                date:''
+            },
         }
     },
     methods: {
-        changeSelect(item) {
-            let id = item.id
+        //更新搜索词
+        async changeSelect(item) {
+            let tag = item.tag
             this.tagList.forEach(item => {
-                if( id === item.id) {
+                if( tag === item.tag) {
                     item.isSelect = !item.isSelect;
                 };
             });
+            let isSelectList = this.tagList.map(item => {
+                if(item.isSelect) {
+                    return item;
+                };
+            });
+            if(this.searchTagList.length !== 0) {
+                let res = await getSearchArticle(this.searchTagList);
+                if(res.code !== 0) {
+                    return;
+                }
+                this.articleList = res.data
+                return;
+            }
+            this.getFileListAll();
         },
+
         //跳转文章内容
         toArticleContent(item) {
             let query = {
-                id: item.id,
-                name: item.name
+                id: item.articleId,
+                name: item.articleName
             }
             this.$router.push({path:'/article', query: query});
         },
@@ -167,6 +152,25 @@ export default {
             let last = res.data.length - 1;
             this.articleList = res.data;
             this.newestArticle = res.data[last];
+        },
+
+        // 选择全部文章
+        selectAllTag() {
+            this.getFileListAll();
+            if(this.searchTagList[0] !== 'all') {
+                this.searchTagList.push('all');
+            }
+        },
+
+        //获取全部文章标签
+        async refleshTagList() {
+            let res = await getTagList();
+            if(res.code !== 0 ) {
+                return;
+            }
+            this.tagList = res.tagList.map((item) => {
+                return { tag: item, isSelect: false }
+            });;
         },
 
 
@@ -211,6 +215,7 @@ export default {
         this.drawRain();
         this.setTableHeight();
         this.getFileListAll();
+        this.refleshTagList();
     }
 }
 </script>
@@ -297,7 +302,7 @@ export default {
     box-sizing: border-box;
     overflow: auto;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     flex-wrap: wrap;
 }
 
