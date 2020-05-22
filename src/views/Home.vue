@@ -20,7 +20,7 @@
                     </div>
                     <div class="author article">
                         <div class="count-label">留言</div>
-                        <div class="article-count">1223</div>
+                        <div class="article-count">4</div>
                     </div>
                 </div>
             </div>
@@ -76,10 +76,10 @@ export default {
     computed: {
         //返回最新数组
         newestList: function() {
-            if(this.articleList.length <10) {
+            if(this.articleList.length <8) {
                 return this.articleList;
             } else {
-                return  this.articleList.slice(this.articleList.length-10,this.articleList.length);
+                return  this.articleList.slice(this.articleList.length-8,this.articleList.length);
             }
         },
 

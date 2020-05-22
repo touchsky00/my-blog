@@ -29,7 +29,7 @@
                 </div>
                 <div class="article-tag">
                     <div class="input-tag">
-                        <div style="width:60%"><input v-model="articleTag" class="input-wrap"/></div>
+                        <div style="width:60%"><input @keyup.enter="addArticleTag" v-model="articleTag" class="input-wrap"/></div>
                         <div style="margin-left:10px;"><button @click="addArticleTag" class="btn primary">添加标签</button></div>
                     </div>
                     <div class="tag-wrapper"> 
@@ -137,6 +137,8 @@ export default {
             this.$message.success('上传成功');
             this.editContent = '';
             this.fileName = '';
+            this.overview = '';
+            this.tagList = [];
         },
         // 返回主页
         toHomePath() {
