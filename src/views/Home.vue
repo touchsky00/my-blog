@@ -68,7 +68,7 @@
 
 
 <script>
-import { throttle, random , drawRain , getWindowWH , drawPointSpread} from '../assets/libs/utils'
+import { throttle, random , drawRain , getWindowWH , drawPointSpread } from '../assets/libs/utils'
 import { getFileList, getTagList , getSearchArticle} from '../api/api'
 
 export default {
