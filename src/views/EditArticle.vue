@@ -7,14 +7,14 @@
                 <div><span class="span-link" @click="toHomePath">返回首页</span></div>
                 <div class="upload-wrapper">
                     <div style="width:50%;margin-right:10px;"><input v-model="fileName" class="input-wrap"/></div>
-                    <!-- <el-upload
+                    <el-upload
                             action
                             :auto-upload="false"
                             :on-change="handleUpload"
                             :show-file-list="false"
                         >
                         <button class="btn primary">点击上传</button>
-                    </el-upload> -->
+                    </el-upload>
                 </div>
             </div>
             <mavon-editor
@@ -123,12 +123,12 @@ export default {
                 content: content,
                 articleTag: tagList,
             }
-            // let fileName = name + '.md';
-            // var file = new File([content], fileName, {
-            //     type: "text/plain;charset=utf-8"
-            // });
-            // let params = new FormData();
-            // params.append("file",file)
+            let fileName = name + '.md';
+            var file = new File([content], fileName, {
+                type: "text/plain;charset=utf-8"
+            });
+            let params = new FormData();
+            params.append("file",file)
             let res = await uploadFile(requestData)
             if(res.code !== 0) {
                 this.$message.error(res.message)
@@ -142,7 +142,7 @@ export default {
         },
         // 返回主页
         toHomePath() {
-            this.$router.push('/home')
+            this.$router.push('/')
         },
     }
 }

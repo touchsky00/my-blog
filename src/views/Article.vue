@@ -104,7 +104,7 @@ export default {
     methods: {
         // 返回主页
         toHomePath() {
-            this.$router.push('/home')
+            this.$router.push('/')
         },  
         //显示评论区
         showCommentInput() {
