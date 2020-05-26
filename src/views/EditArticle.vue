@@ -51,7 +51,7 @@
 
 <script>
 import { readFile } from '../assets/libs/utils'
-import { uploadFile } from '../api/api'
+// import { uploadFile } from '../api/api'
 
 
 export default {
@@ -66,15 +66,15 @@ export default {
         }
     },
     methods: {
-        async handleUpload(ev) {
-            let file = ev.raw;
-            this.fileName = ev.name.replace(/\.md+$/g,'')
-            if(!file) {
-                return;
-            }
-            let data = await readFile(file);
-            this.editContent = data;
-        },
+        // async handleUpload(ev) {
+        //     let file = ev.raw;
+        //     this.fileName = ev.name.replace(/\.md+$/g,'')
+        //     if(!file) {
+        //         return;
+        //     }
+        //     let data = await readFile(file);
+        //     this.editContent = data;
+        // },
         // 添加标签
         addArticleTag() {
             if(!this.articleTag) {
@@ -96,50 +96,50 @@ export default {
             // this.tagList = reSetArr;
         },
         // 提交文章
-        async submitArticle() {
-            let name = this.fileName;
-            let content = this.editContent;
-            let overview = this.overview;
-            let tagList = this.tagList;
-            if(!name) {
-                this.$message.warning('请输入文件名');
-                return;
-            }
-            if(!content) {
-                this.$message.warning('编辑内容为空');
-                return;
-            }
-            if(!overview) {
-                this.$message.warning('请输入文件摘要');
-                return;
-            }
-            if(tagList.length === 0) {
-                this.$message.warning('请输入文件标签');
-                return;
-            }
-            let requestData = {
-                articleName:  name,
-                overview: overview,
-                content: content,
-                articleTag: tagList,
-            }
-            // let fileName = name + '.md';
-            // var file = new File([content], fileName, {
-            //     type: "text/plain;charset=utf-8"
-            // });
-            // let params = new FormData();
-            // params.append("file",file)
-            let res = await uploadFile(requestData)
-            if(res.code !== 0) {
-                this.$message.error(res.message)
-                return;
-            };
-            this.$message.success('上传成功');
-            this.editContent = '';
-            this.fileName = '';
-            this.overview = '';
-            this.tagList = [];
-        },
+        // async submitArticle() {
+        //     let name = this.fileName;
+        //     let content = this.editContent;
+        //     let overview = this.overview;
+        //     let tagList = this.tagList;
+        //     if(!name) {
+        //         this.$message.warning('请输入文件名');
+        //         return;
+        //     }
+        //     if(!content) {
+        //         this.$message.warning('编辑内容为空');
+        //         return;
+        //     }
+        //     if(!overview) {
+        //         this.$message.warning('请输入文件摘要');
+        //         return;
+        //     }
+        //     if(tagList.length === 0) {
+        //         this.$message.warning('请输入文件标签');
+        //         return;
+        //     }
+        //     let requestData = {
+        //         articleName:  name,
+        //         overview: overview,
+        //         content: content,
+        //         articleTag: tagList,
+        //     }
+        //     // let fileName = name + '.md';
+        //     // var file = new File([content], fileName, {
+        //     //     type: "text/plain;charset=utf-8"
+        //     // });
+        //     // let params = new FormData();
+        //     // params.append("file",file)
+        //     let res = await uploadFile(requestData)
+        //     if(res.code !== 0) {
+        //         this.$message.error(res.message)
+        //         return;
+        //     };
+        //     this.$message.success('上传成功');
+        //     this.editContent = '';
+        //     this.fileName = '';
+        //     this.overview = '';
+        //     this.tagList = [];
+        // },
         // 返回主页
         toHomePath() {
             this.$router.push('/home')
