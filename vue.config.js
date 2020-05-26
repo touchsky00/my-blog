@@ -4,7 +4,7 @@ module.exports = {
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://lisbolg.farseer810.com', //API服务器的地址
+                target: 'http://127.0.0.1:9001', //API服务器的地址
                 changeOrigin: true, // 虚拟的站点需要更改origin
             }
         },

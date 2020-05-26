@@ -2,7 +2,7 @@ import axios from 'axios'
 
 class AjaxRequest{
     constructor() {
-        this.baseURL = process.env.NODE_ENV == 'production'?'/':'http://lisbolg.farseer810.com'
+        this.baseURL = process.env.NODE_ENV == 'production'?'/':'http://127.0.0.1:9001'
         this.timeout = 3000 //超时时间
     }
 

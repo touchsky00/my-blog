@@ -69,7 +69,7 @@
 
 <script>
 import { throttle, random , drawRain , getWindowWH , drawPointSpread } from '../assets/libs/utils'
-// import { getFileList, getTagList , getSearchArticle} from '../api/api'
+import { getFileList, getTagList , getSearchArticle} from '../api/api'
 
 export default {
     
@@ -163,15 +163,17 @@ export default {
         },
 
         //获取全部文章标签
-        // async refleshTagList() {
-        //     let res = await getTagList();
-        //     if(res.code !== 0 ) {
-        //         return;
-        //     }
-        //     this.tagList = res.tagList.map((item) => {
-        //         return { tag: item, isSelect: false }
-        //     });;
-        // },
+        async refleshTagList() {
+            console.log('2')
+            let res = await getTagList();
+            if(res.code !== 0 ) {
+                return;
+            }
+            console.log('0',res)
+            this.tagList = res.tagList.map((item) => {
+                return { tag: item, isSelect: false }
+            });;
+        },
 
 
         // 绘制canvas  雨
@@ -215,7 +217,7 @@ export default {
         this.drawRain();
         this.setTableHeight();
         // this.getFileListAll();
-        // this.refleshTagList();
+        this.refleshTagList();
     }
 }
 </script>
