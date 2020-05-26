@@ -164,12 +164,10 @@ export default {
                 articleId: id,
                 articleName: name
             }
-            console.log('0')
             let res = await getFileContent(params)
             if(res.code !== 0) {
                 return;
             }
-            console.log(res)
             this.articleName = res.data.articleName;
             this.htmlMD = res.data.content
         }
