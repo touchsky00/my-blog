@@ -2,7 +2,7 @@ import axios from 'axios'
 
 class AjaxRequest{
     constructor() {
-        this.baseURL = process.env.NODE_ENV == 'production'?'/':'http://localhost:3000'
+        this.baseURL = process.env.NODE_ENV == 'production'?'/':'http://lisbolg.farseer810.com'
         this.timeout = 3000 //超时时间
     }
 
@@ -15,7 +15,6 @@ class AjaxRequest{
     setInterceptor(instance) {
         // 请求时拦截器,更改请求头
         instance.interceptors.request.use((config) => {
-            config.headers.Authorization = "xxx"
             config.headers['Content-Type'] = 'application/json'
             return config;
         }, (err) => {
