@@ -62,7 +62,7 @@
 
 <script>
 import { verifyMail } from '../assets/libs/utils'
-// import { getFileContent, submitComment, getCommentList } from '../api/api'
+import { getFileContent, submitComment, getCommentList } from '../api/api'
 
 
 export default {
@@ -125,56 +125,56 @@ export default {
         // 提交评论
         async submitContent() {
             let { name, email, content } = this.commentContent;
-            // if(!name||!content) {
-            //     this.$message.warning('缺少姓名或评论内容')
-            //     return;
-            // }
-            // if(name.length>20) {
-            //     this.$message.warning('输入少于20个字的名字')
-            //     return;
-            // }
-            // if(content.length > 300) {
-            //     this.$message.warning('评论内容超出限制')
-            //     return;
-            // }
-            // if(email) {
-            //     if(!verifyMail(email)) {
-            //         this.$message.warning('输入正确的邮箱')
-            //         return;
-            //     }
+            if(!name||!content) {
+                this.$message.warning('缺少姓名或评论内容')
+                return;
+            }
+            if(name.length>20) {
+                this.$message.warning('输入少于20个字的名字')
+                return;
+            }
+            if(content.length > 300) {
+                this.$message.warning('评论内容超出限制')
+                return;
+            }
+            if(email) {
+                if(!verifyMail(email)) {
+                    this.$message.warning('输入正确的邮箱')
+                    return;
+                }
             }
 
-        //     let params = {
-        //         articleId: this.$route.query.id,
-        //         name: name,
-        //         content: content,
-        //         email: email
-        //     }
-        //     let res = await submitComment(params);
-        //     this.$message.success('提交成功')
-        //     this.commentContent = {name:'', email:'', content:''};
-        //     this.isShowCommentInput = false;
-        //     this.refleshCommentList();
-        // },
+            let params = {
+                articleId: this.$route.query.id,
+                name: name,
+                content: content,
+                email: email
+            }
+            let res = await submitComment(params);
+            this.$message.success('提交成功')
+            this.commentContent = {name:'', email:'', content:''};
+            this.isShowCommentInput = false;
+            this.refleshCommentList();
+        },
 
         // 获取md文件
-        // async getMdFile() {
-        //     let {id ,name } = this.$route.query;
-        //     let params = {
-        //         articleId: id,
-        //         articleName: name
-        //     }
-        //     let res = await getFileContent(params)
-        //     if(res.code !== 0) {
-        //         return;
-        //     }
-        //     this.articleName = res.data.articleName;
-        //     this.htmlMD = res.data.content
-        // }
+        async getMdFile() {
+            let {id ,name } = this.$route.query;
+            let params = {
+                articleId: id,
+                articleName: name
+            }
+            let res = await getFileContent(params)
+            if(res.code !== 0) {
+                return;
+            }
+            this.articleName = res.data.articleName;
+            this.htmlMD = res.data.content
+        }
     },
     mounted() {
-        // this.getMdFile();
-        // this.refleshCommentList();
+        this.getMdFile();
+        this.refleshCommentList();
     }
 }
 </script>

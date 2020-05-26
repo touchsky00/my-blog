@@ -112,28 +112,28 @@ export default {
     },
     methods: {
         //更新搜索词
-        // async changeSelect(item) {
-        //     let tag = item.tag
-        //     this.tagList.forEach(item => {
-        //         if( tag === item.tag) {
-        //             item.isSelect = !item.isSelect;
-        //         };
-        //     });
-        //     let isSelectList = this.tagList.map(item => {
-        //         if(item.isSelect) {
-        //             return item;
-        //         };
-        //     });
-        //     if(this.searchTagList.length !== 0) {
-        //         let res = await getSearchArticle(this.searchTagList);
-        //         if(res.code !== 0) {
-        //             return;
-        //         }
-        //         this.articleList = res.data
-        //         return;
-        //     }
-        //     this.getFileListAll();
-        // },
+        async changeSelect(item) {
+            let tag = item.tag
+            this.tagList.forEach(item => {
+                if( tag === item.tag) {
+                    item.isSelect = !item.isSelect;
+                };
+            });
+            let isSelectList = this.tagList.map(item => {
+                if(item.isSelect) {
+                    return item;
+                };
+            });
+            if(this.searchTagList.length !== 0) {
+                let res = await getSearchArticle(this.searchTagList);
+                if(res.code !== 0) {
+                    return;
+                }
+                this.articleList = res.data
+                return;
+            }
+            this.getFileListAll();
+        },
 
         //跳转文章内容
         toArticleContent(item) {
@@ -144,19 +144,19 @@ export default {
             this.$router.push({path:'/article', query: query});
         },
         // 获取文章列表
-        // async getFileListAll() {
-        //     let res = await getFileList();
-        //     if(res.code !== 0) {
-        //         return;
-        //     }
-        //     let last = res.data.length - 1;
-        //     this.articleList = res.data;
-        //     this.newestArticle = res.data[last];
-        // },
+        async getFileListAll() {
+            let res = await getFileList();
+            if(res.code !== 0) {
+                return;
+            }
+            let last = res.data.length - 1;
+            this.articleList = res.data;
+            this.newestArticle = res.data[last];
+        },
 
         // 选择全部文章
         selectAllTag() {
-            // this.getFileListAll();
+            this.getFileListAll();
             if(this.searchTagList[0] !== 'all') {
                 this.searchTagList.push('all');
             }
@@ -164,12 +164,10 @@ export default {
 
         //获取全部文章标签
         async refleshTagList() {
-            console.log('2')
             let res = await getTagList();
             if(res.code !== 0 ) {
                 return;
             }
-            console.log('0',res)
             this.tagList = res.tagList.map((item) => {
                 return { tag: item, isSelect: false }
             });;
@@ -216,7 +214,7 @@ export default {
     mounted () {
         this.drawRain();
         this.setTableHeight();
-        // this.getFileListAll();
+        this.getFileListAll();
         this.refleshTagList();
     }
 }
