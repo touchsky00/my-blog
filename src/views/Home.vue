@@ -29,7 +29,7 @@
         <!-- 主页内容栏 -->
         <div class="page-right">
             <div class="page-content">
-                <div class="content-title">My前端之路</div>
+                <div class="content-title" @click="dialogVisable">My前端之路</div>
                 <!-- 分割线 -->
                 <div class="divider"></div>
                 <div style="margin-bottom:30px;">记录学习前端遇到的内容和知识点的笔记</div>
@@ -64,13 +64,21 @@
                 </div> 
             </div>
         </div>
+
+        <my-dialog
+			:title="dialogTitle"
+			:content="dialogContent"
+			:visable="isDialogVisable"
+			@confirm="getRulesForm"
+			@cancel="isDialogVisable = false"
+		/>
     </div>
 </template>
 
 
 <script>
 import { throttle, random , drawRain , getWindowWH , drawPointSpread } from '../assets/libs/utils'
-import { getFileList, getTagList , getSearchArticle} from '../api/api'
+import { getFileList, getTagList , getSearchArticle, login} from '../api/api'
 
 export default {
     
@@ -93,7 +101,9 @@ export default {
                 }
             }
             return arr;
-        }
+        },
+
+        
     },
     
     data() {
@@ -109,6 +119,11 @@ export default {
                 overview:'',
                 date:''
             },
+
+            //登录弹窗
+			isDialogVisable: false,
+			dialogContent: [], //content参数{content,name,label,rules,placeholder}
+			dialogTitle: ""
         }
     },
     methods: {
@@ -210,6 +225,55 @@ export default {
             let height = window.innerHeight - 240;
             var table = document.getElementById('tableWrapper');
             table.style.maxHeight = height + 'px';
+        },
+
+        //显示登陆弹窗
+        dialogVisable() {
+            let addContent = [
+				{
+					name: "name",
+					label: "用户名",
+					placeholder: "请输入姓名",
+					rules: [
+						{
+							required: true,
+							message: "请输入姓名",
+							trigger: "blur"
+						}
+					]
+				},
+				{
+					name: "password",
+					label: "密码",
+					placeholder: "请输入密码",
+					rules: [
+						{
+							required: true,
+							message: "请输入密码",
+							trigger: "blur"
+						}
+					]
+				}
+			];
+			this.isDialogVisable = true;
+			this.dialogTitle = "登录账号"
+			this.dialogContent = addContent;
+        },
+        //获取登陆表单内容
+        async getRulesForm(data) {
+            // console.log(data)
+            let params = {
+                name: data.name,
+                password: data.password
+            }
+            let res = await login(params);
+            if(res.code !== 0) {
+                this.$message.warning('登录失败')
+                return;
+            }
+            this.$store.dispatch('setUserInfo',params);
+            this.$message.success('登录成功')
+            this.isDialogVisable = false;
         }
     },
     mounted () {

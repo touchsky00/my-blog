@@ -144,6 +144,18 @@ export default {
         toHomePath() {
             this.$router.push('/')
         },
+        //判断是否是管理员
+        getUserInfo() {
+            let userInfo = this.$store.state.userInfo
+            if(!userInfo.name&&!userInfo.password) {
+                this.$message.warning('无权限操作');
+                this.$router.push('/')
+                return;
+            }
+        }
+    },
+    mounted() {
+        this.getUserInfo();
     }
 }
 </script>

@@ -60,3 +60,13 @@ export const getSearchArticle = (params) => {
         data: params
     });
 };
+
+
+//登录账号
+export const login = (params) => {
+    return axios.request({
+        method:'post',
+        url:'/api/login',
+        data: params
+    })
+}

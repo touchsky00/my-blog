@@ -170,7 +170,7 @@ export default {
             }
             this.articleName = res.data.articleName;
             this.htmlMD = res.data.content
-        }
+        },
     },
     mounted() {
         this.getMdFile();
