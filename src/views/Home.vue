@@ -19,8 +19,9 @@
                         <div class="article-count"><span @click="selectAllTag" class="span-link">{{articleList.length}}</span></div>
                     </div>
                     <div class="author article">
-                        <div class="count-label">留言</div>
-                        <div class="article-count">4</div>
+                        <!-- TODO -->
+                        <!-- <div class="count-label">留言</div>
+                        <div class="article-count">4</div> -->
                     </div>
                 </div>
             </div>

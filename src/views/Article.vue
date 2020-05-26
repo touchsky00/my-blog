@@ -113,14 +113,14 @@ export default {
 
 
         //更新评论列表
-        // async refleshCommentList() {
-        //     let articleId = this.$route.query.id
-        //     let res = await getCommentList({articleId:articleId});
-        //     if(res.code !== 0) {
-        //         return;
-        //     }
-        //     this.commentList = res.commentList;
-        // },
+        async refleshCommentList() {
+            let articleId = this.$route.query.id
+            let res = await getCommentList({articleId:articleId});
+            if(res.code !== 0) {
+                return;
+            }
+            this.commentList = res.commentList;
+        },
 
         // 提交评论
         async submitContent() {
@@ -164,10 +164,12 @@ export default {
                 articleId: id,
                 articleName: name
             }
+            console.log('0')
             let res = await getFileContent(params)
             if(res.code !== 0) {
                 return;
             }
+            console.log(res)
             this.articleName = res.data.articleName;
             this.htmlMD = res.data.content
         }
