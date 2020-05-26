@@ -6,26 +6,6 @@ html,body {
     font-family:'Microsoft Yahei',"simsun";
     /* background: #ffffff; */
 }
-.el-button {
-    border-radius: 2px;
-}
-.el-button.is-circle {
-    border-radius: 50%;
-}
-
-.el-input__inner {
-    border-radius: 2px;
-}
-.el-popover {
-    padding: 10px 12px;
-    max-height: 68px;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 4;
-    overflow: hidden;
-}
-
 ::-webkit-scrollbar {
 	width: 2px;
 }
