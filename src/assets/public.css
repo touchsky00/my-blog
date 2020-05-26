@@ -4,6 +4,7 @@ html,body {
     width: 100%;
     min-height: 100%;
     font-family:'Microsoft Yahei',"simsun";
+    background: #f7f0db;
     /* background: #ffffff; */
 }
 ::-webkit-scrollbar {
