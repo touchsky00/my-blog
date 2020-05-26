@@ -1,4 +1,6 @@
 module.exports = {
+    publicPath:'/',
+    outputDir:'dist',
     devServer: {
         proxy: {
             '/api': {
@@ -6,5 +8,6 @@ module.exports = {
                 changeOrigin: true, // 虚拟的站点需要更改origin
             }
         },
-    }
+    },
+    assetsDir: 'static',
 }
