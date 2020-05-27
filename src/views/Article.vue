@@ -57,12 +57,22 @@
                 </div>
             </div>
         </div>
+        <div class="nav-sidebar">
+            <div>类似文章</div>
+            <!-- 分割线 -->
+            <div class="divider"></div>
+            <div class="table-wrapper">
+                <div class="article-list" v-for="item in similarList" :key="item.articleId">
+                    <span @click="changeArticleContent(item)" class="span-link-gray">{{item.articleName}}</span>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
 import { verifyMail } from '../assets/libs/utils'
-import { getFileContent, submitComment, getCommentList } from '../api/api'
+import { getFileContent, submitComment, getCommentList, getSearchArticle } from '../api/api'
 
 
 export default {
@@ -98,7 +108,8 @@ export default {
                 content:''
             },
             htmlMD:'',
-            articleName:''
+            articleName:'',
+            similarList:[] ,    //类似文章
         }
     },
     methods: {
@@ -158,8 +169,7 @@ export default {
         },
 
         // 获取md文件
-        async getMdFile() {
-            let {id ,name } = this.$route.query;
+        async getMdFile(id ,name) {
             let params = {
                 articleId: id,
                 articleName: name
@@ -171,9 +181,31 @@ export default {
             this.articleName = res.data.articleName;
             this.htmlMD = res.data.content
         },
+
+        //获取类似文章
+        async getSimilarList(tagList) {
+            if(tagList.length !== 0) {
+                let res = await getSearchArticle(tagList);
+                if(res.code !== 0) {
+                    return;
+                }
+                this.similarList = res.data.filter((item) => {
+                    return item.articleName !== this.articleName;
+                })
+                return;
+            }
+        },
+
+        //阅读相识文章
+        changeArticleContent(item) {
+            let { articleId, articleName, articleTag } = item
+            this.getMdFile(articleId,articleName);
+            this.getSimilarList(articleTag);
+        }
     },
     mounted() {
-        this.getMdFile();
+        this.getMdFile(this.$route.query.id, this.$route.query.name);
+        this.getSimilarList(this.$route.query.tagList);
         this.refleshCommentList();
     }
 }
@@ -186,6 +218,8 @@ export default {
     height: 100%;
     box-sizing: border-box;
     padding: 20px;
+    display: flex;
+    justify-content: flex-end;
 }
 .content-wrapper {
     width: 60%;
@@ -257,5 +291,24 @@ export default {
 }
 .article-wrapper {
     text-align: left;
+}
+
+/* 导航栏 */
+.nav-sidebar {
+    width: 25%;
+    text-align: left;
+    box-sizing: border-box;
+    padding: 10px 80px 5px 20px;
+}
+.table-wrapper {
+    font-size: 14px;
+    box-sizing: border-box;
+    overflow: auto;
+}
+.article-list {
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 </style>

@@ -4,6 +4,7 @@ html,body {
     width: 100%;
     min-height: 100%;
     font-family:'Microsoft Yahei',"simsun";
+    background: #f4edd5;
 }
 .el-input__inner {
 	border-radius: 2px !important;

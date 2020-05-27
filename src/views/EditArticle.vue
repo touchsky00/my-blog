@@ -46,12 +46,20 @@
             </div>
         </div>
 
+        <my-dialog
+			:title="dialogTitle"
+			:content="dialogContent"
+			:visable="isDialogVisable"
+			@confirm="getRulesForm"
+			@cancel="isDialogVisable = false"
+		/>
+
     </div>
 </template>
 
 <script>
 import { readFile } from '../assets/libs/utils'
-import { uploadFile } from '../api/api'
+import { uploadFile, login } from '../api/api'
 
 
 export default {
@@ -62,7 +70,12 @@ export default {
             mavonHeight: window.innerHeight - 240 + 'px',
             overview:'',
             tagList:[],
-            articleTag:''
+            articleTag:'',
+
+            //登录弹窗
+			isDialogVisable: false,
+			dialogContent: [], //content参数{content,name,label,rules,placeholder}
+			dialogTitle: ""
         }
     },
     methods: {
@@ -144,18 +157,59 @@ export default {
         toHomePath() {
             this.$router.push('/')
         },
-        //判断是否是管理员
-        getUserInfo() {
-            let userInfo = this.$store.state.userInfo
-            if(!userInfo.name&&!userInfo.password) {
-                this.$message.warning('无权限操作');
-                this.$router.push('/')
+
+         //显示登陆弹窗
+        dialogVisable() {
+            let addContent = [
+				{
+					name: "name",
+					label: "用户名",
+					placeholder: "请输入姓名",
+					rules: [
+						{
+							required: true,
+							message: "请输入姓名",
+							trigger: "blur"
+						}
+					]
+				},
+				{
+					name: "password",
+					label: "密码",
+					placeholder: "请输入密码",
+					rules: [
+						{
+							required: true,
+							message: "请输入密码",
+							trigger: "blur"
+						}
+					]
+				}
+			];
+			this.isDialogVisable = true;
+			this.dialogTitle = "登录账号"
+			this.dialogContent = addContent;
+        },
+
+        //获取登陆表单内容
+        async getRulesForm(data) {
+            let params = {
+                name: data.name,
+                password: data.password
+            }
+            let res = await login(params);
+            if(res.code !== 0) {
+                this.$message.warning('登录失败');
+                this.isDialogVisable = true;
                 return;
             }
+            this.$store.dispatch('setUserInfo',params);
+            this.$message.success('登录成功')
+            this.isDialogVisable = false;
         }
     },
     mounted() {
-        this.getUserInfo();
+        this.dialogVisable();
     }
 }
 </script>

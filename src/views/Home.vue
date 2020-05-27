@@ -1,8 +1,47 @@
 <template>
-    <div class="home" @click="getMouseXY">
-        <canvas id="rain"></canvas>
+    <div class="home">
         <!-- 主页左边栏 -->
         <div class="page-left">
+            <!-- 最新发布 -->
+            <div class="article-dispaly">
+                <!-- 文章列表 -->
+                <div class="table-title">
+                    <span>最新发布</span>
+                </div>
+                <div class="table-wrapper" id="tableWrapper">
+                    <div class="article-list" v-for="item in newestList" :key="item.articleId">
+                        <span @click="toArticleContent(item)" class="span-link-gray">{{item.articleName}}</span>
+                    </div>
+                </div>
+            </div>      
+        </div>
+        <!-- 主页内容栏 -->
+        <div class="page-right">
+            <div class="page-content">
+                 <!-- 最紧更新 -->
+                <div v-show="searchTagList.length == 0">
+                    <div class="article-new">最近更新：<span @click="toArticleContent(newestArticle)" class="span-link-gray">{{newestArticle.articleName}}</span><span style="font-size:13px;">{{newestArticle.date.slice(0,10)}}</span></div>
+                    <!-- 分割线 -->
+                    <div class="divider"></div>
+                    <div>
+                        <div class="article-tag">标签：<span v-for="(item,index) in newestArticle.articleTag" :key="index" class="span-link" style="margin-right:10px;">{{item}}</span></div>
+                        {{newestArticle.overview}}
+                        <div class="read-complete"><span @click="toArticleContent(newestArticle)" class="span-link">前往阅读>>></span></div>
+                    </div>
+                </div>
+                <div class="content-title">全部文章</div>
+                <!-- 分割线 -->
+                <div class="divider"></div>
+                <div class="table-wrapper" id="tableWrapper">
+                    <div class="article-list-all" v-for="item in articleList" :key="item.articleId">
+                        <span @click="toArticleContent(item)" class="span-link-gray">{{item.articleName}}</span><span>{{item.date.slice(0,10)}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 导航栏 -->
+        <div class="nav-side">
             <!-- 文章标签 -->
             <div class="article-label">
                 <div>文章标签</div>
@@ -26,72 +65,16 @@
                 </div>
             </div>
         </div>
-        <!-- 主页内容栏 -->
-        <div class="page-right">
-            <div class="page-content">
-                <div class="content-title" @click="dialogVisable">My前端之路</div>
-                <!-- 分割线 -->
-                <div class="divider"></div>
-                <div style="margin-bottom:30px;">记录学习前端遇到的内容和知识点的笔记</div>
-                <!-- 最新发布 -->
-                <div class="article-dispaly">
-                    <div v-show="searchTagList.length == 0">
-                        <div class="article-new">最近更新：<span @click="toArticleContent(newestArticle)" class="span-link-gray">{{newestArticle.articleName}}</span><span style="font-size:13px;">{{newestArticle.date.slice(0,10)}}</span></div>
-                        <!-- 分割线 -->
-                        <div class="divider"></div>
-                        <div>
-                            <div class="article-tag">标签：<span v-for="(item,index) in newestArticle.articleTag" :key="index" class="span-link" style="margin-right:10px;">{{item}}</span></div>
-                            {{newestArticle.overview}}
-                            <div class="read-complete"><span @click="toArticleContent(newestArticle)" class="span-link">前往阅读>>></span></div>
-                        </div>
-                    </div>
-                    <!-- 文章列表 -->
-                    <div class="table-title">
-                        <span v-if="searchTagList.length == 0">最新发布</span>
-                        <span v-else>搜索标签：</span>
-                        <span class="span-link" style="margin-right:10px;" v-for="(item,index) in searchTagList" :key="index">{{item}}</span>
-                    </div>
-                    <div class="table-wrapper" id="tableWrapper" v-if="searchTagList.length !== 0">
-                        <div class="article-list" v-for="item in articleList" :key="item.articleId">
-                            <span @click="toArticleContent(item)" class="span-link-gray">{{item.articleName}}</span><span style="font-size:13px;margin-left:15px;">{{item.date.slice(0,10)}}</span>
-                        </div>
-                    </div>
-                    <div class="table-wrapper" id="tableWrapper" v-if="searchTagList.length === 0">
-                        <div class="article-list" v-for="item in newestList" :key="item.articleId">
-                            <span @click="toArticleContent(item)" class="span-link-gray">{{item.articleName}}</span><span style="font-size:13px;margin-left:15px;">{{item.date.slice(0,10)}}</span>
-                        </div>
-                    </div>
-                </div> 
-            </div>
-        </div>
-
-        <my-dialog
-			:title="dialogTitle"
-			:content="dialogContent"
-			:visable="isDialogVisable"
-			@confirm="getRulesForm"
-			@cancel="isDialogVisable = false"
-		/>
     </div>
 </template>
 
 
 <script>
-import { throttle, random , drawRain , getWindowWH , drawPointSpread } from '../assets/libs/utils'
 import { getFileList, getTagList , getSearchArticle, login} from '../api/api'
 
 export default {
     
     computed: {
-        //返回最新数组
-        newestList: function() {
-            if(this.articleList.length <8) {
-                return this.articleList;
-            } else {
-                return  this.articleList.slice(this.articleList.length-8,this.articleList.length);
-            }
-        },
-
         //计算searchTagList
         searchTagList: function() {
             let arr = [];
@@ -102,16 +85,12 @@ export default {
             }
             return arr;
         },
-
-        
     },
     
     data() {
         return {
-            //标签列表
-            tagList: [],
-            //文章列表
-            articleList:[],
+            tagList: [],  //标签列表
+            articleList:[],  //文章列表
             //最新篇文章
             newestArticle: {
                 articleId:'',
@@ -119,11 +98,7 @@ export default {
                 overview:'',
                 date:''
             },
-
-            //登录弹窗
-			isDialogVisable: false,
-			dialogContent: [], //content参数{content,name,label,rules,placeholder}
-			dialogTitle: ""
+            newestList:[],  //最新文章列表
         }
     },
     methods: {
@@ -155,7 +130,8 @@ export default {
         toArticleContent(item) {
             let query = {
                 id: item.articleId,
-                name: item.articleName
+                name: item.articleName,
+                tagList: item.articleTag
             }
             this.$router.push({path:'/article', query: query});
         },
@@ -167,6 +143,11 @@ export default {
             }
             let last = res.data.length - 1;
             this.articleList = res.data;
+            if(this.articleList.length < 10) {
+                this.newestList = this.articleList;
+            } else {
+                this.newestList = this.articleList.slice(this.articleList.length-10,this.articleList.length);
+            }
             this.newestArticle = res.data[last];
         },
 
@@ -189,95 +170,14 @@ export default {
             });;
         },
 
-
-        // 绘制canvas  雨
-        drawRain() {
-            let can = document.getElementById("rain");
-            // 浏览器宽高
-            let { w, h } = getWindowWH();
-            can.width = w;
-            can.height = h;
-            // 自动调整canvas宽高
-            window.onresize = function() {
-                w = window.innerWidth;
-                h = window.innerHeight;
-                can.width = w;
-                can.height = h;
-            };
-            let canContent = can.getContext("2d");
-            //创建雨
-            drawRain(w,h,canContent);
-        },
-
-        // 获取鼠标位置 绘制鼠标移动效果
-        getMouseXY(event) {
-            if(this.$route.path !== "/home") {
-                return;
-            }
-            let x = event.x;
-            let y = event.y;
-            let can = document.getElementById("rain");
-            let canContent = can.getContext("2d");
-            drawPointSpread(x,y,canContent);
-        },
         // 设置表高度
         setTableHeight() {
             let height = window.innerHeight - 240;
             var table = document.getElementById('tableWrapper');
             table.style.maxHeight = height + 'px';
         },
-
-        //显示登陆弹窗
-        dialogVisable() {
-            let addContent = [
-				{
-					name: "name",
-					label: "用户名",
-					placeholder: "请输入姓名",
-					rules: [
-						{
-							required: true,
-							message: "请输入姓名",
-							trigger: "blur"
-						}
-					]
-				},
-				{
-					name: "password",
-					label: "密码",
-					placeholder: "请输入密码",
-					rules: [
-						{
-							required: true,
-							message: "请输入密码",
-							trigger: "blur"
-						}
-					]
-				}
-			];
-			this.isDialogVisable = true;
-			this.dialogTitle = "登录账号"
-			this.dialogContent = addContent;
-        },
-        //获取登陆表单内容
-        async getRulesForm(data) {
-            // console.log(data)
-            let params = {
-                name: data.name,
-                password: data.password
-            }
-            let res = await login(params);
-            if(res.code !== 0) {
-                this.$message.warning('登录失败')
-                return;
-            }
-            this.$store.dispatch('setUserInfo',params);
-            this.$message.success('登录成功')
-            this.isDialogVisable = false;
-        }
     },
     mounted () {
-        this.drawRain();
         this.setTableHeight();
         this.getFileListAll();
         this.refleshTagList();
@@ -290,6 +190,7 @@ export default {
     height: 100%;
     display: flex;
     justify-content: space-between;
+    font-size: 16px;
 }
 /*  主页左边栏  */
 .page-left {
@@ -297,7 +198,7 @@ export default {
     text-align: left;
     margin-right: 10px;
     box-sizing: border-box;
-    padding: 5px 20px 5px 80px;
+    padding: 20px 20px 5px 80px;
 }
 
 /*  作者内容  */
@@ -373,10 +274,10 @@ export default {
 
 /* 主页内容栏 */
 .page-right {
-    width: 75%;
+    width: 50%;
     height: 100%;
     box-sizing: border-box;
-    padding: 5px 80px 5px 0;
+    padding: 15px 10px 5px 0;
 }
 .page-content {
     width: 100%;
@@ -395,10 +296,9 @@ export default {
 
 .article-dispaly {
     box-sizing: border-box;
-    padding: 0 20px;
 }
 .article-new {
-    font-size: 24px;
+    font-size: 18px;
     text-align: left;
 }
 
@@ -406,7 +306,7 @@ export default {
     text-align: right;
 }
 .read-complete {
-    margin-top: 15px;
+    margin: 15px 0;
 }
 
 .table-title {
@@ -416,11 +316,31 @@ export default {
     margin-bottom: 10px;
 }
 .table-wrapper {
+    font-size: 14px;
     box-sizing: border-box;
-    padding: 0 20px;
     overflow: auto;
 }
 .article-list {
     margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.article-list-all {
+    margin: 5px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 16px;
+    box-sizing: border-box;
+    padding: 0 10px;
+}
+
+/* 导航栏 */
+.nav-side {
+    width: 25%;
+    text-align: left;
+    box-sizing: border-box;
+    padding: 5px 80px 5px 20px;
 }
 </style>
