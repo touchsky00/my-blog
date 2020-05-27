@@ -1,5 +1,5 @@
 <template>
-	<el-dialog @open="getRuleForm" :title="title" :visible.sync="visable" width="30%" :close-on-click-modal="false">
+	<el-dialog :show-close="false" @open="getRuleForm" :title="title" :visible.sync="visable" width="30%" :close-on-click-modal="false">
 		<el-form :rules="rules" :model="ruleForm" class="my-form" ref="ruleForm">
 			<el-form-item :prop="item.name" v-for="(item,index) in content" :key="index">
 				<div class="input-wrapper">

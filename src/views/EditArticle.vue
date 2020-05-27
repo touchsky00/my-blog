@@ -51,7 +51,7 @@
 			:content="dialogContent"
 			:visable="isDialogVisable"
 			@confirm="getRulesForm"
-			@cancel="isDialogVisable = false"
+			@cancel="cencleLogin"
 		/>
 
     </div>
@@ -206,6 +206,10 @@ export default {
             this.$store.dispatch('setUserInfo',params);
             this.$message.success('登录成功')
             this.isDialogVisable = false;
+        },
+        //取消登陆
+        cencleLogin() {
+            this.toHomePath();
         }
     },
     mounted() {
