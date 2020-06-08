@@ -148,7 +148,7 @@ export default {
             } else {
                 this.newestList = this.articleList.slice(this.articleList.length-10,this.articleList.length);
             }
-            console.log(this.articleList)
+            console.log(res.data)
             this.newestArticle = res.data[last];
         },
 
