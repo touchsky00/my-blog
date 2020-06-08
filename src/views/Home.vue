@@ -148,6 +148,7 @@ export default {
             } else {
                 this.newestList = this.articleList.slice(this.articleList.length-10,this.articleList.length);
             }
+            console.log(this.articleList)
             this.newestArticle = res.data[last];
         },
 
@@ -172,8 +173,8 @@ export default {
 
         // 设置表高度
         setTableHeight() {
-            // let height = window.innerHeight - 240;
-            // var table = document.getElementById('tableWrapper');
+            let height = window.innerHeight - 240;
+            var table = document.getElementById('tableWrapper');
             // table.style.maxHeight = height + 'px';
         },
     },
