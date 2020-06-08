@@ -8,7 +8,7 @@
                 <div class="table-title">
                     <span>最新发布</span>
                 </div>
-                <div class="table-wrapper" id="tableWrapper">
+                <div class="table-wrapper" id="tableWrapper" v-if="newestList.length > 0">
                     <div class="article-list" v-for="item in newestList" :key="item.articleId">
                         <span @click="toArticleContent(item)" class="span-link-gray">{{item.articleName}}</span>
                     </div>
@@ -32,7 +32,7 @@
                 <div class="content-title">全部文章</div>
                 <!-- 分割线 -->
                 <div class="divider"></div>
-                <div class="table-wrapper" id="tableWrapper">
+                <div class="table-wrapper" id="tableWrapper" v-if="articleList.length > 0">
                     <div class="article-list-all" v-for="item in articleList" :key="item.articleId">
                         <span @click="toArticleContent(item)" class="span-link-gray">{{item.articleName}}</span><span>{{item.date.slice(0,10)}}</span>
                     </div>

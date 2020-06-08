@@ -61,7 +61,7 @@
             <div>类似文章</div>
             <!-- 分割线 -->
             <div class="divider"></div>
-            <div class="table-wrapper">
+            <div class="table-wrapper" v-if="similarList.length > 0">
                 <div class="article-list" v-for="item in similarList" :key="item.articleId">
                     <span @click="changeArticleContent(item)" class="span-link-gray">{{item.articleName}}</span>
                 </div>
