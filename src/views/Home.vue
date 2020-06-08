@@ -172,9 +172,9 @@ export default {
 
         // 设置表高度
         setTableHeight() {
-            let height = window.innerHeight - 240;
-            var table = document.getElementById('tableWrapper');
-            table.style.maxHeight = height + 'px';
+            // let height = window.innerHeight - 240;
+            // var table = document.getElementById('tableWrapper');
+            // table.style.maxHeight = height + 'px';
         },
     },
     mounted () {
