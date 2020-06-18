@@ -7,17 +7,17 @@ Vue.use(VueRouter)
     {
       path: '/',
       name: 'Home',
-      component: () => import('../views/Home.vue')
+      component: () => import('@/views/Home.vue')
     },
     {
       path: '/upload',
       name: 'Upload',
-      component: () => import('../views/EditArticle.vue')
+      component: () => import('@/views/EditArticle.vue')
     },
     {
       path: '/article',
       name: 'Article',
-      component: () => import('../views/Article.vue')
+      component: () => import('@/views/Article.vue')
     }
   ]
 
