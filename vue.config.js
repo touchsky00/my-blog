@@ -1,11 +1,17 @@
+const path = require('path')
+
+function resolve (dir) {
+    return path.join(__dirname, dir)
+}
+
 module.exports = {
     publicPath:'/',
     outputDir:'dist',
     devServer: {
         proxy: {
             '/api': {
-                target: 'http://127.0.0.1:9001', 
-                // target: 'http://localhost:9001',
+                // target: 'http://127.0.0.1:9001', 
+                target: 'http://localhost:9001',
                 changeOrigin: true, // 虚拟的站点需要更改origin
             }
         },
@@ -28,6 +34,21 @@ module.exports = {
             appleTouchIcon: 'favicon.ico',
             maskIcon      : 'favicon.ico',
             msTileImage   : 'favicon.ico'
+        }
+    },
+    configureWebpack: {
+        resolve: {
+            extensions:['.js','.vue','.json'],
+            // 别名配置
+            alias: {
+                '@': resolve('src'),
+            }
+        },
+        // 插件配置
+        plugins: [],
+        // webpack-load配置
+        module: {
+            rules: []
         }
     }
 }
